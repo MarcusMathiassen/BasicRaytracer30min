@@ -48,7 +48,7 @@ void clamp255(Vec3& col) {
 int main() {
 
   const int H = 500;
-  const int W  = 500;
+  const int W = 500;
 
   const Vec3 white(255,255,255);
   const Vec3 black(0,0,0);
