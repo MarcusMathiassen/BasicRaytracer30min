@@ -65,7 +65,7 @@ int main() {
   out << "P3\n" << W << ' ' << H << ' ' << "255\n";
 
   double t;
-  Vec3 pix_col(0, 0, 0);
+  Vec3 pix_col(black);
 
   for (int y = 0; y < H; ++y) {
     for (int x = 0; x < W; ++x) {
