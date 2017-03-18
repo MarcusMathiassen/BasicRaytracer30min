@@ -72,7 +72,7 @@ int main() {
         Vec3 N = sphere.getNormal(pi);
         double dt = dot(L.normalize(), N.normalize());      
         
-        pixel_col = (red+white*dt)*0.5;
+        pix_col = (red+white*dt)*0.5;
         clamp255(pix_col);
       }
       out<<(int)pix_col.x<<' '<<(int)pix_col.y <<' '<<(int)pix_col.z<<'\n';
