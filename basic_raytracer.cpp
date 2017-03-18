@@ -13,8 +13,7 @@ struct Vec3 {
 inline double dot(const Vec3& a,const Vec3& b){return(a.x*b.x+a.y*b.y+a.z*b.z);}
 
 struct Ray {
-  Vec3 o;
-  Vec3 d;
+  Vec3 o,d;
   Ray(const Vec3& o, const Vec3& d) : o(o), d(d) {}
 };
 
@@ -61,27 +60,22 @@ int main() {
   out << "P3\n" << W << ' ' << H << ' ' << "255\n";
 
   double t;
-  Vec3 pixel_col(0,0,0);
+  Vec3 pix_col(0,0,0);
   for (int y = 0; y < H; ++y) {
     for (int x = 0; x < W; ++x) {
-
-      pixel_col = black;
-
+      pix_col = black;
+      
       const Ray ray(Vec3(x,y,0),Vec3(0,0,1));
-
       if (sphere.intersect(ray, t)) {
-
         Vec3 pi = ray.o + ray.d*t;
         Vec3 L = light.c - pi;
         Vec3 N = sphere.getNormal(pi);
-        double dt = dot(L.normalize(), N.normalize());
-
+        double dt = dot(L.normalize(), N.normalize());      
+        
         pixel_col = (red+white*dt)*0.5;
-        clamp255(pixel_col);
+        clamp255(pix_col);
       }
-      out << (int)pixel_col.x << ' '
-          << (int)pixel_col.y << ' '
-          << (int)pixel_col.z << '\n';
+      out<<(int)pix_col.x<<' '<<(int)pix_col.y <<' '<<(int)pix_col.z<<'\n';
     }
   }
 }
