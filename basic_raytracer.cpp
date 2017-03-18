@@ -4,13 +4,18 @@
 struct Vec3 {
   double x,y,z;
   Vec3(double x, double y, double z) : x(x), y(y), z(z) {}
-  Vec3 operator + (const Vec3& v) const { return Vec3(x + v.x, y + v.y, z + v.z); }
-  Vec3 operator - (const Vec3& v) const { return Vec3(x - v.x, y - v.y, z - v.z); }
+  Vec3 operator + (const Vec3& v) const { return Vec3(x+v.x, y+v.y, z+v.z); }
+  Vec3 operator - (const Vec3& v) const { return Vec3(x-v.x, y-v.y, z-v.z); }
   Vec3 operator * (double d) const { return Vec3(x*d, y*d, z*d); }
   Vec3 operator / (double d) const { return Vec3(x/d, y/d, z/d); }
-  Vec3 normalize() const {double mg=sqrt(x*x+y*y+z*z);return Vec3(x/mg,y/mg,z/mg);}
+  Vec3 normalize() const {
+    double mg = sqrt(x*x + y*y + z*z);
+    return Vec3(x/mg,y/mg,z/mg);
+  }
 };
-inline double dot(const Vec3& a,const Vec3& b){return(a.x*b.x+a.y*b.y+a.z*b.z);}
+inline double dot(const Vec3& a, const Vec3& b) {
+  return (a.x*b.x + a.y*b.y + a.z*b.z);
+}
 
 struct Ray {
   Vec3 o,d;
@@ -21,7 +26,7 @@ struct Sphere {
   Vec3 c;
   double r;
   Sphere(const Vec3& c, double r) : c(c), r(r) {}
-  Vec3 getNormal(const Vec3& pi) const { return ((pi-c)/r); }
+  Vec3 getNormal(const Vec3& pi) const { return (pi - c) / r; }
   bool intersect(const Ray& ray, double &t) const {
     const Vec3 o = ray.o;
     const Vec3 d = ray.d;
@@ -49,9 +54,9 @@ int main() {
   const int H = 500;
   const int W = 500;
 
-  const Vec3 white(255,255,255);
-  const Vec3 black(0,0,0);
-  const Vec3 red(255,0,0);
+  const Vec3 white(255, 255, 255);
+  const Vec3 black(0, 0, 0);
+  const Vec3 red(255, 0, 0);
 
   Sphere sphere(Vec3(W*0.5, H*0.5, 50), 50);
   Sphere light(Vec3(0, 0, 50), 1);
@@ -60,23 +65,25 @@ int main() {
   out << "P3\n" << W << ' ' << H << ' ' << "255\n";
 
   double t;
-  Vec3 pix_col(0,0,0);
-  
+  Vec3 pix_col(0, 0, 0);
+
   for (int y = 0; y < H; ++y) {
     for (int x = 0; x < W; ++x) {
       pix_col = black;
-      
+
       const Ray ray(Vec3(x,y,0),Vec3(0,0,1));
       if (sphere.intersect(ray, t)) {
         Vec3 pi = ray.o + ray.d*t;
         Vec3 L = light.c - pi;
         Vec3 N = sphere.getNormal(pi);
-        double dt = dot(L.normalize(), N.normalize());      
-        
-        pix_col = (red+white*dt)*0.5;
+        double dt = dot(L.normalize(), N.normalize());
+
+        pix_col = (red + white*dt) * 0.5;
         clamp255(pix_col);
       }
-      out<<(int)pix_col.x<<' '<<(int)pix_col.y <<' '<<(int)pix_col.z<<'\n';
+      out << (int)pix_col.x << ' '
+          << (int)pix_col.y << ' '
+          << (int)pix_col.z << '\n';
     }
   }
 }
